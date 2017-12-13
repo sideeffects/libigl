@@ -13,7 +13,9 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
-#include <Eigen/PardisoSupport>
+#if EIGEN_USE_MKL_ALL
+  #include <Eigen/PardisoSupport>
+#endif
 // Bug in unsupported/Eigen/SparseExtra needs iostream first
 #include <iostream>
 #include <unsupported/Eigen/SparseExtra>

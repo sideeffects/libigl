@@ -13,6 +13,7 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
+#include <Eigen/PardisoSupport>
 // Bug in unsupported/Eigen/SparseExtra needs iostream first
 #include <iostream>
 #include <unsupported/Eigen/SparseExtra>
@@ -146,9 +147,15 @@ struct igl::min_quad_with_fixed_data
     NUM_SOLVER_TYPES = 4
   } solver_type;
   // Solvers
+#if EIGEN_USE_MKL_ALL
+  Eigen::PardisoLLT <Eigen::SparseMatrix<T > > llt;
+  Eigen::PardisoLDLT<Eigen::SparseMatrix<T > > ldlt;
+  Eigen::PardisoLU<Eigen::SparseMatrix<T, Eigen::ColMajor>>   lu;
+#else
   Eigen::SimplicialLLT <Eigen::SparseMatrix<T > > llt;
   Eigen::SimplicialLDLT<Eigen::SparseMatrix<T > > ldlt;
   Eigen::SparseLU<Eigen::SparseMatrix<T, Eigen::ColMajor>, Eigen::COLAMDOrdering<int> >   lu;
+#endif
   // QR factorization
   // Are rows of Aeq linearly independent?
   bool Aeq_li;
